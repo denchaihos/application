@@ -11,6 +11,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--<script src="js/jquery-1.9.1.min.js" type="text/javascript"></script>-->
+    <!--<script src="js/jquery-1.10.2.min.js" type="text/javascript"></script>-->
     <script src="js/jquery-1.11.0.min.js"></script>
     <script src="js/jquery-migrate-1.0.0.js"></script>
     <!--<script type="text/javascript" src="js/jquery.min.js"></script>-->
@@ -62,6 +64,18 @@
             overflow: visible;
             font-size: 12px;
         }
+        #pi{
+            display: none;
+            overflow: visible;
+            font-size: 12px;
+            color: blue;
+        }
+        #show_pi{
+            color: red;
+            text-align: right;
+            font-size: 12px;
+            cursor: pointer;
+        }
     </style>
     <script type="text/javascript">
         $(document).ready(function () {
@@ -72,7 +86,44 @@
                     return false;
                 }
             });
+            //////////// javascritp  for  other file on fancybox  call  /////////////
+            ///// pt_history_form.php///////////
+           $('body').on('click', '#vstdate', function(){
+              // alert('me');
+              var history_vstdate = this.innerText;
+              var hn = $('#hnn').val();
+              
+              $.getJSON('pt_history_data.php',{vstdttm:history_vstdate,hn:hn}, function(data) {
+                    $.each(data, function(key,value){
+                        //alert(value.bw);
+                        $('#bw').text(value.bw+" ก.ก.") ;
+                        $('#height').text(value.height+" ซ.ม.");
+                        $('#waist_cm').text(value.waist_cm+" cc.");
+                        $('#tt').text(value.tt+" ก.ก.") ;
+                        $('#bmi').text(value.bmi+" ");
+                        $('#pr').text(value.pr+" ครั้ง/นาที");
+                        $('#rr').text(value.rr+" ครั้ง/นาที") ;
+                        $('#sbp').text(value.sbp+" / "+value.dbp+" มม.ปรอท");
+                        $('#cc_h').text(value.cc);
+                        $('#pe_h').text(value.pe);
+                        $('#pi_h').text(value.pi);
+                        $('#pdx_h').text(value.pdx);
+                        $('#dx_other_h').text('');
+                        $('#dx_other_h').append("<div>"+value.dx1+"</div><div>"+value.dx2+"</div><div>"+value.dx3+"</div><div>"+value.dx4+"</div><div>"+value.dx5+"</div>");
+                        //$('#dx_other1_h').add('p').text(value.dx2);
+                        //$('#dx_other2_h').text(value.dx2);
+                        
+                        //alert(value.bw);
+                    });
+                });
+               
+            }); 
+            //  end of  pt_history_form.php//////
+            //  end of  javascritp  for  other file on fancybox  call//////
+            
         });
+        //  end of  document.reday/////////
+        
 
         // unblock when ajax activity stops
         $(document).ajaxStop($.unblockUI);
@@ -207,7 +258,7 @@
         </div>
     </div>
 </div>
-<input type="text" name="change_dx" value="" id="change_dx"/>
+<input type="hidden" name="change_dx" value="" id="change_dx"/>
 <div class="col-lg-12" >
 
     <div class="col-md-12 table-curved">
@@ -220,13 +271,15 @@
             echo '<th >HN</th>';
             echo '<th>เวลารับบริการ</th>';
             echo '<th>CC</th>';
+            echo '<th></th>';
             echo '<th class="mythead">pdx</th>';
             echo '<th class="mythead">dx2</th>';
             echo '<th class="mythead">dx3</th>';
             echo '<th class="mythead">dx4</th>';
             echo '<th class="mythead">dx5</th>';
             echo '<th class="mythead">dx6</th>';
-            echo '<th style="text-align: center;cursor:zoom-out"><span></span></th>';
+            //echo '<th style="text-align: center;cursor:zoom-out"><span></span></th>';
+            echo '<th style="text-align: center;cursor:zoom-out"></th>';
             echo '<th style="text-align: center;cursor:zoom-out"></th>';
             echo '</tr>';
             echo '</thead>';
@@ -248,6 +301,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     $('#visit_date').focus();
+
     $(function(){
         var keyStop = {
             8: ":not(input:text, textarea, input:file, input:password)", // stop backspace = back
@@ -264,19 +318,19 @@ $(document).ready(function() {
             return true;
         });
     });
-
+    
 
     /////////////////////////////  function  on click submit_date///////////////////////////////////////////////////
     $("input#submit_date").click(function(event){
         $('#hn').val('');
         var radios_visit_type = document.getElementsByName("visit_type");
-
         for (var i = 0; i < radios_visit_type.length; i++) {
             if (radios_visit_type[i].checked) {
                 var visit_type = (radios_visit_type[i].value);
                 break;
             }
         }
+        
         //alert(visit_type);
         var row_per_page = 10;
         var visit_date = $('#visit_date').val();
@@ -304,22 +358,46 @@ $(document).ready(function() {
                     "<td>"+value.ptname+"</td>" +
                     "<td>"+value.hn+"</td>" +
                     "<td>"+value.vstdttm+"</td>" +
-                    "<td id='cc'>"+value.cc+"</td>" +
+                    "<td id='cc'>"+value.cc+"<div id='pi'>PI::"+value.pi+"</div></td>" +
+                    "<td id='show_pi'>show</td>" +
                     "<td class='dx' id='"+value.id_dx+"'>"+value.pdx+"</td>" +
                     "<td class='dx' id='"+value.id1+"'>"+value.dx1+"</td>" +
                     "<td class='dx' id='"+value.id2+"'>"+value.dx2+"</td>" +
                     "<td class='dx' id='"+value.id3+"'>"+value.dx3+"</td>" +
                     "<td class='dx' id='"+value.id4+"'>"+value.dx4+"</td>" +
                     "<td class='dx' id='"+value.id5+"'>"+value.dx5+"</td>" +
-                    "<td class='dx_all'  id='"+value.vn+"'><i class='fa fa-child'></i></td>" +
+                    //"<td class='dx_all'  id='"+value.vn+"'><i class='fa fa-child'></i></td>" +
                     "<td class='dx_new'  id='"+value.vn+"'><i class='fa fa-plus dx'></i></td>" +
+                    "<td class='history' id='"+value.hn+","+value.vn+"'><i class='fa fa-user dx' style='color: #0089CB'></i></td>" +
                     "</tr>");
                 i++;
+            });
+                        ///////////click  to show present illnes  //////////
+            $("td#show_pi").click(function(){
+                var this_td = this;               
+                var check_status = this.innerText;
+                
+               $(this).parent().find('div#pi').slideToggle("slow");
+                if(check_status == 'show'){   
+                    this_td.innerText = "hide";
+                }else{
+                     this_td.innerText = "show";
+                } 
+            });
+            $("td#show_pi").mouseover(function(){
+                var this_td = this;
+               $(this).parent().find('div#pi').slideToggle("slow");
+                     this_td.innerText = "hide";
+            });
+            $("td#show_pi").mouseout(function(){                
+                $(this).parent().find('div#pi').slideToggle("slow");
+                var this_td = this;
+                this_td.innerText = "show";
             });
             /////////////click dx  to  edit/////////////////////////////////
             var dx = $('td.dx');
             var len_dx = dx.length;
-            $("td.dx_p,td.dx,td.dx_all,.dx_new").click(function(event){
+            $("td.dx_p,td.dx,td.dx_all,td.history,.dx_new").click(function(event){
                 var id_dx =  this.id;
                 var class_dx = this.className;
                 //alert(class_dx);
@@ -331,19 +409,24 @@ $(document).ready(function() {
                         var link_page = 'pt_edit_dx_form.php?id_dx='+id_dx+'&&pdx='+pdx+'&&visit_type='+visit_type;
                     }else if(class_dx=='dx_new'){
                         var link_page = 'pt_add_dx_form.php?id_dx='+id_dx;
-                    } else{
+                    }else if(class_dx=='history'){                           
+                        var link_page = 'pt_history_form.php?hn='+id_dx;
+                    }else{
                         var link_page = 'pt_edit_dx_all_form.php?id_dx='+id_dx;
                     }
                     $.fancybox({'href'	: link_page,//link_page+id_dx+'&&pdx='+pdx+'',
-                        'width' : '70%',
-                        'height' : '70%',
-                        'autoSize' : true,
+                        'width' : '100%',
+                        'height' : '90%',
+                        'autoSize' : false,
                         'transitionIn'  :   'elastic',
                         'transitionOut' :   'elastic',
                         'speedIn'    :  600,
                         'speedOut'   :  200,
                         'overlayShow'   :   false,
                         'closeBtn': true,
+                        "hideOnOverlayClick" : false, // prevents closing clicking OUTSIE fancybox
+                        "hideOnContentClick" : false, // prevents closing clicking INSIDE fancybox
+                        "enableEscapeButton" : false,  // prevents closing pressing ESCAPE key
                         onComplete : function() {
                             var old_dx = this_td.innerText;
                             $('#change_dx').val(old_dx);
@@ -351,9 +434,13 @@ $(document).ready(function() {
 
                         },
                         beforeShow: function () {
+                           // $("body").css({'display': 'none'});
                             //alert('me');
                             /* this.width = $(this.element).data("width") ? $(this.element).data("width") : null;
                              this.height = $(this.element).data("height") ? $(this.element).data("height") : null;*/
+                        },
+                        afterClose: function(){
+                           // $("body").css({'overflow-y':'visible'});
                         },
                         onClosed : function(){
                             var change_dx = $('#change_dx').val();
@@ -425,21 +512,45 @@ $(document).ready(function() {
                                 "<td>"+value.ptname+"</td>" +
                                 "<td>"+value.hn+"</td>" +
                                 "<td>"+value.vstdttm+"</td>" +
-                                "<td id='cc'>"+value.cc+"</td>" +
+                                "<td id='cc'>"+value.cc+"<div id='pi'>PI::"+value.pi+"</div></td>" +
+                                "<td id='show_pi'>show</td>" +
                                 "<td class='dx' id='"+value.id_dx+"'>"+value.pdx+"</td>" +
                                 "<td class='dx' id='"+value.id1+"'>"+value.dx1+"</td>" +
                                 "<td class='dx' id='"+value.id2+"'>"+value.dx2+"</td>" +
                                 "<td class='dx' id='"+value.id3+"'>"+value.dx3+"</td>" +
                                 "<td class='dx' id='"+value.id4+"'>"+value.dx4+"</td>" +
                                 "<td class='dx' id='"+value.id5+"'>"+value.dx5+"</td>" +
-                                "<td class='dx_all'  id='"+value.vn+"'><i class='fa fa-child'></i></td>" +
+                               // "<td class='dx_all'  id='"+value.vn+"'><i class='fa fa-child'></i></td>" +
                                 "<td class='dx_new'  id='"+value.vn+"'><i class='fa fa-plus dx'></i></td>" +
+                                "<td class='history' id='"+value.hn+","+value.vn+"'><i class='fa fa-user dx' style='color: #0089CB'></i></td>" +                                        
                                 "</tr>");
+                        });
+                        ///////////click  to show present illnes  //////////
+                        $("td#show_pi").click(function(){
+                            var this_td = this;               
+                            var check_status = this.innerText;
+
+                           $(this).parent().find('div#pi').slideToggle("slow");
+                            if(check_status == 'show'){   
+                                this_td.innerText = "hide";
+                            }else{
+                                 this_td.innerText = "show";
+                            } 
+                        });
+                        $("td#show_pi").mouseover(function(){
+                            var this_td = this;
+                           $(this).parent().find('div#pi').slideToggle("slow");
+                                 this_td.innerText = "hide";
+                        });
+                        $("td#show_pi").mouseout(function(){                
+                            $(this).parent().find('div#pi').slideToggle("slow");
+                            var this_td = this;
+                            this_td.innerText = "show";
                         });
                         /////////////click dx  to  edit/////////////////////////////////
                         var dx = $('td.dx');
                         var len_dx = dx.length;
-                        $("td.dx_p,td.dx,td.dx_all,td.dx_new").click(function(event){
+                        $("td.dx_p,td.dx,td.dx_all,td.history,td.dx_new").click(function(event){
                             var id_dx =  this.id;
                             var class_dx = this.className;
                             //alert(id_dx);
@@ -451,6 +562,8 @@ $(document).ready(function() {
                                     var link_page = 'pt_edit_dx_form.php?id_dx='+id_dx+'&&pdx='+pdx+'&&visit_type='+visit_type;
                                 }else if(class_dx=='dx_new'){
                                     var link_page = 'pt_add_dx_form.php?id_dx='+id_dx;
+                                }else if(class_dx=='history'){                           
+                                    var link_page = 'pt_history_form.php?hn='+id_dx;
                                 } else{
                                     var link_page = 'pt_edit_dx_all_form.php?id_dx='+id_dx;
                                 }
@@ -464,6 +577,9 @@ $(document).ready(function() {
                                     'speedOut'   :  200,
                                     'overlayShow'   :   false,
                                     'closeBtn': true,
+                                    "hideOnOverlayClick" : false, // prevents closing clicking OUTSIE fancybox
+                                    "hideOnContentClick" : false, // prevents closing clicking INSIDE fancybox
+                                    "enableEscapeButton" : false,  // prevents closing pressing ESCAPE key                                    
                                     onComplete : function() {
                                         var old_dx = this_td.innerText;
                                         $('#change_dx').val(old_dx);
@@ -569,7 +685,7 @@ function search_by_hn(){
                     "<td class='dx' id='"+value.id3+"'>"+value.dx3+"</td>" +
                     "<td class='dx' id='"+value.id4+"'>"+value.dx4+"</td>" +
                     "<td class='dx' id='"+value.id5+"'>"+value.dx5+"</td>" +
-                    "<td class='dx_all'  id='"+value.vn+"'><i class='fa fa-child'></i></td>" +
+                   // "<td class='dx_all'  id='"+value.vn+"'><i class='fa fa-child'></i></td>" +
                     "<td class='dx_new'  id='"+value.vn+"'><i class='fa fa-plus dx'></i></td>" +
                     "</tr>");
             });

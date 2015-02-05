@@ -1,38 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script type="text/javascript">
-        (function($){
-            $(document).on('click', '.click-me', function(e){
-                doSomething.call(this, e);
-            });
-        })(jQuery);
+<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>-->
 
-        function insertHTML(str){
-            var s = document.getElementsByTagName('script'), lastScript = s[s.length-1];
-            lastScript.insertAdjacentHTML("beforebegin", str);
-        }
-
-        function doSomething(event){
-            console.log(this.id); // this will be the clicked element
-        }
-    </script>
-    <!--... other head stuff ...-->
+    <!--<script src="js/jquery-1.11.0.min.js" type="text/javascript"></script>-->
+    <!--<script src="js/jquery-1.10.2.min.js" type="text/javascript"></script>-->
+    <!--<script src="js/jquery-1.9.1.min.js" type="text/javascript"></script>-->
+    <!--<script src="js/jquery-latest.js" type="text/javascript"></script>-->
+    <!--<script src="js/jquery-2.0.0.min.js" type="text/javascript"></script>-->
+    <script src="js/jquery-2.1.3.min.js" type="text/javascript"></script>
+<script>
+$(document).ready(function(){
+    $('body').on('click', '#parentElement', function(){
+   // $("#my").html(result);
+   alert('me');
+});
+});
+</script>
 </head>
 <body>
 
-<!--Best if you inject the button element with javascript if you plan to support users with javascript disabled-->
-<script type="text/javascript">
-    insertHTML('<button class="click-me" id="btn1">Button 1</button>');
-</script>
+<p>This is a paragraph.</p>
 
-<!--Use this when you don't care about broken buttons when javascript is disabled.-->
-<!--buttons can be used outside of forms http://stackoverflow.com/a/14461672/175071 -->
-<button class="click-me" id="btn2">Button 2</button>
-<input class="click-me" type="button" value="Button 3" id="btn3">
+<button id="parentElement">Click me!</button>
+<br><br>
 
-<!--Use this when you want to lead the user somewhere when javascript is disabled-->
-<a class="click-me" href="/path/to/non-js/action" id="btn4">Button 4</a>
+<div><b>Note:</b> The live() method was deprecated in jQuery version 1.7, and removed in version 1.9. We have used an earlier version of jQuery (1.7 in the script tag), for this example to work.</div> 
 
 </body>
 </html>

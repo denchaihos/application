@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <meta http-equiv="expires" content="Sun, 01 Jan 2014 00:00:00 GMT"/>
+        <meta http-equiv="pragma" content="no-cache" />
     <!-- Bootstrap -->
     <script src="js/jquery-1.11.0.min.js"></script>
 

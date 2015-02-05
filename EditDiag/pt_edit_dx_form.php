@@ -66,8 +66,8 @@
 //echo "visit_type".$visit_type;
     $id_dx = $_GET['id_dx'];
     $dx = $_GET['pdx'];
-echo $dx;
-echo $id_dx;
+//echo $dx;
+//echo $id_dx;
     include 'connect.php';
 if($visit_type=="O"){
     $sql = 'select cnt as cnt from ovstdx where id="'.$id_dx.'"';

@@ -3,8 +3,8 @@ $host = "localhost";
 $uname = "root";
 $passwd = "123456";
 $dbname = "hi";
-//$con = mysql_connect($host,$uname,$passwd);
-$con = mysql_connect('localhost', 'root', '123456');
+$con = mysql_connect($host,$uname,$passwd);
+//$con = mysql_connect('192.168.11.5', 'hiuser', '212224');
 If (!$con) {
     echo "<h3> error  :  Can not coonect databse</h3>";
     exit();

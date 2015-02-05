@@ -59,7 +59,6 @@
 
             document.getElementById("add_dx").action="pt_add_dx.php";
         }
-        
         function delete_dx(){
             document.getElementById("add_dx").action="pt_delete_dx.php";
             $("#icd10").val('');
@@ -151,10 +150,10 @@
 </head>
 <body>
 เพิ่มรหัสวินิจฉัย
-<?
+<?php
 $id_dx = $_GET['id_dx'];
-$dx = $_GET['pdx'];
-//echo $id_dx;
+//$dx = $_GET['pdx'];
+//echo $dx;
 include 'connect.php';
 $sql ='select o.*,i.icd10name from ovstdx o left outer join icd101 i on i.icd10=o.icd10 where o.vn="'.$id_dx.'" order by o.cnt desc';
 $result = mysql_query($sql,$con);
@@ -201,7 +200,7 @@ $result = mysql_query($sql,$con);
         <ul id="data" style="list-style: none;padding-left:0;">   </ul>
         <div class="form-group">
             <input type="submit" id="submit_save" class="btn btn-success custom" value="บันทึก" name="submit_save" onclick="save_dx()"/>
-            <input type="submit" id="submit_delete" class="btn btn-primary" value="ลบ DX"  name="submit_delete" onclick="delete_dx()" <? if($cnt==1) echo 'disabled'; ?> />
+            <input type="submit" id="submit_delete" class="btn btn-primary" value="ลบ DX"  name="submit_delete" onclick="delete_dx()" disabled="<? if($obj->cnt==1) echo 'disabled'; ?>" />
             <input type="button" class="btn btn-warning" value="ยกเลิก" onclick="btnCancel()"/>
         </div>
 

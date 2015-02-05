@@ -48,11 +48,18 @@ while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
     $row_array['ptname'] = $row['ptname'];
     $row_array['vstdttm'] = $row['vstdttm'];
     //  add cc//////
-    $sql_cc = 'select pillness from pillness where vn="'.$row['vn'].'"  ';
+    $sql_cc = 'select symptom from symptm where vn="'.$row['vn'].'"  ';
     $result_cc = mysql_query($sql_cc);
     $row_array['cc'] = "";
     while($row_cc = mysql_fetch_array($result_cc,MYSQL_ASSOC)){
-        $row_array['cc'] = $row_array['cc'].$row_cc['pillness'];
+        $row_array['cc'] = $row_array['cc'].$row_cc['symptom'];
+    };
+    //  add PI//////
+    $sql_pi = 'select pillness from pillness where vn="'.$row['vn'].'"  ';
+    $result_pi = mysql_query($sql_pi);
+    $row_array['pi'] = "";
+    while($row_pi = mysql_fetch_array($result_pi,MYSQL_ASSOC)){
+        $row_array['pi'] = $row_array['pi'].$row_cc['pillness'];
     };
     $row_array['pdx'] = $row['icd10'];
     // add other dx///

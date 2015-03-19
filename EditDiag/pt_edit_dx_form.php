@@ -58,9 +58,21 @@
                 }
             return false;
         }
+        function fancyboxClose(){
+	$.fancybox.close(); 
+}
     </script>
 </head>
 <body>
+    <div class="container baackgroud_me">
+        <div class="col-lg-12 label label-default">
+            <div class="col-lg-6" style="font-size:18px;text-align: left">
+               แก้ไขรหัสวินิจฉัย        
+            </div>
+            <div class="col-lg-6 fancybox-skin" style="text-align:right;">  
+                <!--<img src="css/fancybox/fancy_close.png" alt="" onclick="fancyboxClose();" style="cursor:pointer"/>-->
+            </div>
+        </div>
 <?
     $visit_type = $_GET['visit_type'];
 //echo "visit_type".$visit_type;
@@ -83,7 +95,7 @@ if($visit_type=="O"){
     $result = mysql_query($sql,$con);
     $obj = mysql_fetch_object($result);
 ?>
-<div class="baackgroud_me col-lg-12">
+<div class="col-lg-12">
     รหัสวินิจฉัย
     <br/>
     <form name="edit_dx" id="edit_dx"  method="post"  onsubmit="return ajaxSubmit(this)">
@@ -99,5 +111,6 @@ if($visit_type=="O"){
             </div>
     </form>
 </div>
+    </div>
 </body>
 </html>

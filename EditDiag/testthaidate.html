@@ -19,7 +19,18 @@
     $('.datepicker').datepicker({
         format: 'dd-mm-yyyy',
         language: 'th'
-    })
+    });
+  
+$(document).ready(function() {
+   // var today = '123456';
+
+   // var dd =today.substring(4,2);
+   var today = new Date();
+   
+
+    var dd = ('0'+today.getDate()).substring(0,-2);
+    alert(dd);
+    });
 </script>
 </body>
 </html>

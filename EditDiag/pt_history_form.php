@@ -19,24 +19,24 @@
     <!-- Bootstrap -->
     <!--<link rel="stylesheet" href="css/bootstrap.min.css">-->
     <style type="text/css">
-        .baackgroud_me{
-            
-            height: 100%;
+        .baackgroud_me{            
+            //height: 100%;
             background-color: #e0e0e0;
             padding: 5px;
-            margin: auto;
+           // margin: auto;
         }
-        .vstdate{
+        .vstdate_h{
             overflow: scroll;
             width: 200px;
-            height:500px;
+            height:650px;
             //position: left;
             cursor: pointer;
         }
         .content_history{
             
-            height:500px;
+           // height:650px;
             width: 1000px;
+            overflow: scroll;
         }
         #title{
             font-size: 12px;
@@ -52,8 +52,47 @@
         .panel{
             margin-bottom: 0px;
         }
+        
+/* Tab Navigation */
+// tabs//////////////
+
+.nav-tabs {
+    margin: 0;
+    padding: 0;
+    border: 0;    
+}
+.nav-tabs > li > a {
+    background: #DADADA;
+    border-top-left-radius:  5px;
+    border-top-right-radius: 5px;
+   // border-top-left-radius: 5px;
+  //  box-shadow: inset 0 -8px 7px -9px rgba(0,0,0,.4),-2px -2px 5px -2px rgba(0,0,0,.4);
+  
+}
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover {
+    background: #F5F5F5;
+   // box-shadow: inset 0 0 0 0 rgba(0,0,0,.4),-2px -3px 5px -2px rgba(0,0,0,.4);
+    border-top-left-radius:  5px;
+    border-top-right-radius: 5px;
+}
+
+/* Tab Content */
+.tab-pane {
+    background: #F5F5F5;
+    box-shadow: 0 0 4px rgba(0,0,0,.4);
+   // border-radius: 0;
+    
+   // text-align: center;
+   padding: 5px;
+}
     </style>
- 
+    <script>
+     function fancyboxClose(){
+	$.fancybox.close(); 
+}
+    </script>
+
 </head>
 <body>
     <?    
@@ -128,57 +167,55 @@
          }
          return substr(trim($str), 0, -1);
         }
-$today = time();
-
-                            
-                            //$date = date('m/d/Y h:i:s a');                            
-                            //echo '<h5>'.DateThai($date).'</h5>';
+    $today = time();
     $hn = explode(',',$_GET['hn']);
     $hn = $hn[0];
-    $vn = $hn[1];
-    ?>
-    Patient EMR
-    <input type="hidden" name="hn" id="hnn" value="<? echo $hn ?>"/>
-    <input type="hidden" name="vn" id="hnn" value="<? echo $vn ?>"/>
-   
-<?
-    
-    
+    //$vn = $hn[1];
+    ?> 
+    <div class="col-lg-12 label label-default">
+        <div class="col-lg-6" style="font-size:20px;text-align: left">
+            Patient EMR ::  HN::
+            <input type="hidden" name="hn" id="hnn" value="<? echo $hn ?>"/>
+            <span id="hn_h"><? echo $hn ?></span>
+            <!--<input type="hidden" name="vn" id="hnn" value="<? //echo $vn ?>"/>-->
+        </div>
 
+        <div class="col-lg-6 fancybox-skin" style="text-align:right;">  
+            <img src="css/fancybox/fancy_close.png" alt="" onclick="fancyboxClose();" style="cursor:pointer"/>
+        </div>
+        </div>
+    <?   
     include 'connect.php';
     $sql = 'select vstdttm ,time(vstdttm) as vstdttmtime from ovst where hn = '.$hn.' order by vstdttm desc';
     $result = mysql_query($sql,$con);
     ?>
-    <div class="baackgroud_me col-lg-12">
+   
+    <div id="me"  class="baackgroud_me col-lg-12">
         <div class="col-lg-2 ">
-            <div class="vstdate">
+            <div id="vstdate_h" class="vstdate_h">
             
-                <table class="table  table-hover table-striped" >
+                <table id="table_h" class="table  table-hover table-striped" >
                     <thead>
                         <tr>
-                            <th style="width: 150px">วันที่มารับบริการ</th>
-                            
+                            <th style="width: 150px">วันที่มารับบริการ</th>                            
                         </tr>
                     </thead>
-                     <tbody>
-                    <?
-                    while ($obj = mysql_fetch_object($result)){
-                        echo '<tr>';
-                        echo '<td id="vstdate" onclick="test(this)">';
-                        echo $obj->vstdttm;
-                        echo '</td>';
-
-                        echo '</tr>';
-                    }
-                    ?>
-
-
+                    <tbody>
+                        <?
+                        while ($obj = mysql_fetch_object($result)){
+                            echo '<tr>';
+                            echo '<td id="vstdate" onclick="test(this)">';
+                            echo $obj->vstdttm;
+                            echo '</td>';
+                            echo '</tr>';
+                        }
+                        ?>
                     </tbody>
                 </table>  
             </div>
         </div>
         <div class="col-lg-10 ">
-            <div class="content_history">
+            <div id="content_history"  class="content_history panel panel-danger">
                 
                 <?
                     $sql = 'select p.*,m.namemrt,o.nameoccptn,r.namerlgn,t.nametumb,a.nameampur,c.namechw,py.namepttype '
@@ -194,105 +231,155 @@ $today = time();
                     $obj = mysql_fetch_object($result);
                     
                 ?>
-                <div class="panel panel-warning">
-                    <div class="panel-heading" >
-                        <h3 class="panel-title">ประวัติทั่วไป</h3>
-                    </div>
-                    <div class="panel-body" id="panel">                        
-                        <span class="label label-default" id="title">ชื่อ-นามสกุล&nbsp</span>
-                        <span class="text_content"><? echo $obj->fname.'  &nbsp&nbsp'.$obj->lname; ?></span>
-                        <span id="space" ></span>
-                        <span class="label label-default" id="title">วันเดือนปีเกิด&nbsp</span>
-                        <span class="text_content"><? echo DateThai($obj->brthdate).'  &nbsp&nbsp'.'' ?></span>
-                        <span class="label label-default" id="title">อายุ&nbsp</span>
-                        <span class="text_content"><? echo timespan($obj->brthdate,$today).'  &nbsp&nbsp'.'' ?></span>
-                        <span class="label label-default" id="title">เลขที่บัตรประชาชน&nbsp</span>
-                        <span class="text_content"><? echo $obj->pop_id.'  &nbsp&nbsp'.'' ?></span>
-                        <br/>
-                        <span class="label label-default" id="title">สถานภาพ&nbsp</span>
-                        <span class="text_content"><? echo $obj->namemrt.'  &nbsp&nbsp'.'' ?></span>
-                        <span class="label label-default" id="title">อาชีพ&nbsp</span>
-                        <span class="text_content"><? echo $obj->nameoccptn.'  &nbsp&nbsp'.'' ?></span>
-                        <span class="label label-default" id="title">ศาสนา&nbsp</span>
-                        <span class="text_content"><? echo $obj->namerlgn.'  &nbsp&nbsp'.'' ?></span>
-                        <span class="label label-default" id="title">กรุ๊ปเลือด&nbsp</span>
-                        <span class="text_content"><? if($obj->bloodgrp==''){ echo 'ไม่ระบุ  &nbsp&nbsp';  }  else { echo $obj->bloodgrp.'  &nbsp&nbsp'.'' ; } ?></span>
-                        <span class="label label-default" id="title">ประวัติการแพ้ยา&nbsp</span>
-                        <span class="text_content"><? if($obj->allergy=='' || $obj->allergy == null ){ echo 'ไม่ระบุ  &nbsp&nbsp';  }  else { echo $obj->allergy.'  &nbsp&nbsp'.'' ; } ?></span>
-                        <span class="label label-default" id="title">สิทธิ์ประจำตัว&nbsp</span>
-                        <span class="text_content"><? echo $obj->namepttype.'  &nbsp&nbsp'.'' ;  ?></span>
-                       
-
-                    </div>
-                </div>
-                <div class="panel panel-warning">
-                    <div class="panel-heading" >
-                        <h3 class="panel-title">ที่อยู่</h3>
-                    </div>
-                    <div class="panel-body" id="panel"> 
-                        <span class="label label-default" id="title">เลขที่&nbsp</span>
-                        <span class="text_content"><? echo $obj->addrpart.'  &nbsp&nbsp'; ?></span>
-                        <span class="label label-default" id="title">หมู่&nbsp</span>
-                        <span class="text_content"><? echo $obj->moopart.'  &nbsp&nbsp'.'' ?></span>
-                        <span class="label label-default" id="title">ตำบล&nbsp</span>
-                        <span class="text_content"><? echo $obj->nametumb.'  &nbsp&nbsp'.'' ?></span>
-                        <span class="label label-default" id="title">อำเภอ&nbsp</span>
-                        <span class="text_content"><? echo $obj->nameampur.'  &nbsp&nbsp'.'' ?></span>
-                        <span class="label label-default" id="title">จังหวัด&nbsp</span>
-                        <span class="text_content"><? echo $obj->namechw.'  &nbsp&nbsp'.'' ?></span>
-                        <span class="label label-default" id="title">โทรศัพท์&nbsp</span>
-                        <span class="text_content"><? echo $obj->infmtel.','.$obj->hometel.'  &nbsp&nbsp'.'' ?></span>
-                    </div> 
-                </div>
-                <div class="panel panel-warning">
-                    <div class="panel-heading" >
-                        <h3 class="panel-title">ประวัติการรักษา</h3>
-                    </div>
-                    <div class="panel-body" id="panel">
-                        <h6><b>ข้อมูลผู้ป่วย</b></h6>
-                        <h6><b>ข้อมูลซักประวัติ</b></h6>
-                        <span class="label label-default" id="title">น้ำหนัก&nbsp</span>
-                        <span id="bw" class="text_content"> </span>
-                        <span class="label label-default" id="title">ส่วนสูง&nbsp</span>
-                        <span id="height" class="text_content"> </span>
-                        <span class="label label-default" id="title">รอบเอว&nbsp</span>
-                        <span id="waist_cm" class="text_content"> </span>
-                        <span class="label label-default" id="title">BMI&nbsp</span>
-                        <span id="bmi" class="text_content"> </span>
-                        <span class="label label-default" id="title">อุณหภูมิ&nbsp</span>
-                        <span id="tt" class="text_content"> </span>
-                        <span class="label label-default" id="title">pr&nbsp</span>
-                        <span id="pr" class="text_content"> </span>
-                        <span class="label label-default" id="title">rr&nbsp</span>
-                        <span id="rr" class="text_content"> </span>
-                        <span class="label label-default" id="title">BP&nbsp</span>
-                        <span id="sbp" class="text_content"> </span>
-                        <br/>
-                        <span class="label label-default" id="title">CC&nbsp</span>
-                        <span id="cc_h" class="text_content"> </span>
-                        <div>
-                            <span class="label label-default" id="title">PI&nbsp</span>
-                            <span id="pi_h" class="text_content"> </span>  
-                        </div>
-                        <div class="col-lg-6">
-                            <h6><b>ข้อมูลการตรวจร่างกาย</b></h6>
-                            <span id="pe_h" class="text_content"> </span>  
-                        </div>
-                        <div class="col-lg-6">
-                            <h6><b>ข้อมูลการวินิจฉัย</b></h6>
-                            <span class="label label-default" id="title">PDX&nbsp</span>
-                            <span id="pdx_h" class="text_content"> </span>
-                            <br/>
-                            <span class="label label-default" id="title">Dx Other&nbsp</span>                        
-                            <span id="dx_other_h" class="text_content"> </span> 
-                        </div>
-
-                        
-                        
-
-                    </div>
-                </div>    
                 
+                <div class="panel-heading" >
+                    <h3 class="panel-title">ประวัติการรักษา ของผู้รับบริการ  ประจำวันที่ <span id="dateshow"></span></h3>
+                </div>
+                <div class="panel-body" id="panel">                  
+                    <div class="panel panel-warning">
+                        <div class="panel-heading" >
+                            <h3 class="panel-title">ประวัติทั่วไป</h3>
+                        </div>
+                        <div class="panel-body" id="panel">                        
+                            <span class="label label-default" id="title">ชื่อ-นามสกุล&nbsp</span>
+                            <span class="text_content"><? echo $obj->fname.'  &nbsp&nbsp'.$obj->lname; ?></span>
+                            <span id="space" ></span>
+                            <span class="label label-default" id="title">วันเดือนปีเกิด&nbsp</span>
+                            <span class="text_content"><? echo DateThai($obj->brthdate).'  &nbsp&nbsp'.'' ?></span>
+                            <span class="label label-default" id="title">อายุ&nbsp</span>
+                            <span class="text_content"><? echo timespan($obj->brthdate,$today).'  &nbsp&nbsp'.'' ?></span>
+                            <span class="label label-default" id="title">เลขที่บัตรประชาชน&nbsp</span>
+                            <span class="text_content"><? echo $obj->pop_id.'  &nbsp&nbsp'.'' ?></span>
+                            <br/>
+                            <span class="label label-default" id="title">สถานภาพ&nbsp</span>
+                            <span class="text_content"><? echo $obj->namemrt.'  &nbsp&nbsp'.'' ?></span>
+                            <span class="label label-default" id="title">อาชีพ&nbsp</span>
+                            <span class="text_content"><? echo $obj->nameoccptn.'  &nbsp&nbsp'.'' ?></span>
+                            <span class="label label-default" id="title">ศาสนา&nbsp</span>
+                            <span class="text_content"><? echo $obj->namerlgn.'  &nbsp&nbsp'.'' ?></span>
+                            <span class="label label-default" id="title">กรุ๊ปเลือด&nbsp</span>
+                            <span class="text_content"><? if($obj->bloodgrp==''){ echo 'ไม่ระบุ  &nbsp&nbsp';  }  else { echo $obj->bloodgrp.'  &nbsp&nbsp'.'' ; } ?></span>
+                            <span class="label label-default" id="title">ประวัติการแพ้ยา&nbsp</span>
+                            <span class="text_content"><? if($obj->allergy=='' || $obj->allergy == null ){ echo 'ไม่ระบุ  &nbsp&nbsp';  }  else { echo $obj->allergy.'  &nbsp&nbsp'.'' ; } ?></span>
+                            <span class="label label-default" id="title">สิทธิ์ประจำตัว&nbsp</span>
+                            <span class="text_content"><? echo $obj->namepttype.'  &nbsp&nbsp'.'' ;  ?></span>
+
+
+                        </div>
+                    </div>
+                    <div class="panel panel-warning">
+                        <div class="panel-heading" >
+                            <h3 class="panel-title">ที่อยู่</h3>
+                        </div>
+                        <div class="panel-body" id="panel"> 
+                            <span class="label label-default" id="title">เลขที่&nbsp</span>
+                            <span class="text_content"><? echo $obj->addrpart.'  &nbsp&nbsp'; ?></span>
+                            <span class="label label-default" id="title">หมู่&nbsp</span>
+                            <span class="text_content"><? echo $obj->moopart.'  &nbsp&nbsp'.'' ?></span>
+                            <span class="label label-default" id="title">ตำบล&nbsp</span>
+                            <span class="text_content"><? echo $obj->nametumb.'  &nbsp&nbsp'.'' ?></span>
+                            <span class="label label-default" id="title">อำเภอ&nbsp</span>
+                            <span class="text_content"><? echo $obj->nameampur.'  &nbsp&nbsp'.'' ?></span>
+                            <span class="label label-default" id="title">จังหวัด&nbsp</span>
+                            <span class="text_content"><? echo $obj->namechw.'  &nbsp&nbsp'.'' ?></span>
+                            <span class="label label-default" id="title">โทรศัพท์&nbsp</span>
+                            <span class="text_content"><? echo $obj->infmtel.','.$obj->hometel.'  &nbsp&nbsp'.'' ?></span>
+                        </div> 
+                    </div>
+                    <div class="panel panel-warning" style="padding: 1px;">
+                        <div class="panel-heading" style="margin-buttom:2px;">
+                            <h3 class="panel-title">ประวัติการรักษา</h3>
+                        </div>
+                        <div class="panel-body" id="panel" >
+                        
+                        <!--tabsssssssss-->
+                        <div class="col-log-12">
+
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li class="active">
+                                      <a href="#home" role="tab" data-toggle="tab">
+                                          <icon class="fa fa-home"></icon>ข้อมูลซักประวัติ
+                                      </a>
+                                    </li>
+                                    <li><a href="#profile" role="tab" data-toggle="tab">
+                                      <i class="fa fa-user"></i> การตรวจของแพทย์
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a href="#messages" role="tab" data-toggle="tab">
+                                          <i class="fa fa-envelope"></i> ผลชัณสูตร
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a href="#settings" role="tab" data-toggle="tab">
+                                          <i class="fa fa-cog"></i> เอ็กซเรย์
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a href="#settings" role="tab" data-toggle="tab">
+                                          <i class="fa fa-money"></i> ค่าใช้จ่าย
+                                      </a>
+                                    </li>
+                                </ul>
+
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    <div class="tab-pane fade active in" id="home">
+
+                                            <!--<h6><b>ข้อมูลผู้ป่วย</b></h6>-->                            
+                                            <span class="label label-default" id="title">น้ำหนัก&nbsp</span>
+                                            <span id="bw" class="text_content"> </span>
+                                            <span class="label label-default" id="title">ส่วนสูง&nbsp</span>
+                                            <span id="height" class="text_content"> </span>
+                                            <span class="label label-default" id="title">รอบเอว&nbsp</span>
+                                            <span id="waist_cm" class="text_content"> </span>
+                                            <span class="label label-default" id="title">BMI&nbsp</span>
+                                            <span id="bmi" class="text_content"> </span>
+                                            <span class="label label-default" id="title">อุณหภูมิ&nbsp</span>
+                                            <span id="tt" class="text_content"> </span>
+                                            <span class="label label-default" id="title">pr&nbsp</span>
+                                            <span id="pr" class="text_content"> </span>
+                                            <span class="label label-default" id="title">rr&nbsp</span>
+                                            <span id="rr" class="text_content"> </span>
+                                            <span class="label label-default" id="title">BP&nbsp</span>
+                                            <span id="sbp" class="text_content"> </span>
+                                            <br/>
+                                            <span class="label label-default" id="title">CC&nbsp</span>
+                                            <span id="cc_h" class="text_content"> </span>
+                                            <div>
+                                                <span class="label label-default" id="title">PI&nbsp</span>
+                                                <span id="pi_h" class="text_content"> </span>  
+                                            </div>        
+
+                                    </div>
+                                    <div class="tab-pane fade" id="profile">
+                                        <div class="panel-body" id="panel">
+                                            <div class="col-lg-6">
+                                                <h6><b>ข้อมูลการตรวจร่างกาย</b></h6>
+                                                <span id="pe_h" class="text_content"> </span>  
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <h6><b>ข้อมูลการวินิจฉัย</b></h6>
+                                                <span class="label label-default" id="title">PDX&nbsp</span>
+                                                <span id="pdx_h" class="text_content"> </span>
+                                                <br/>
+                                                <span class="label label-default" id="title">Dx Other&nbsp</span>                        
+                                                <span id="dx_other_h" class="text_content"> </span> 
+                                            </div>
+                                        </div>      
+                                    </div>
+                                    <div class="tab-pane fade" id="messages">
+                                        <h2>Messages Content Goes Here</h2>                                  
+                                    </div>
+                                    <div class="tab-pane fade" id="settings">
+                                        <h2>Settings Content Goes Here</h2>                                 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
             </div>
         </div>    
     </div>    

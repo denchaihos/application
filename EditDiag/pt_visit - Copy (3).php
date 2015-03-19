@@ -76,8 +76,6 @@
             font-size: 12px;
             cursor: pointer;
         }
-  
-
     </style>
     <script type="text/javascript">
         $(document).ready(function () {
@@ -242,7 +240,7 @@
                 </div>
             </form>
         </div>
-        
+
         <div class="col-lg-4" style="text-align: right">
             <form class="form-inline" role="form">
 
@@ -302,23 +300,10 @@
 </div>
 
 <script type="text/javascript">
-    function cancelAjax(){
-	$("#dlg").hide('800', "swing", function () { $("#bkg").fadeOut("500") });
-};
 $(document).ready(function() {
     var today = new Date();
-    if(today.getDate() < 10){
-        var dd = ('0'+today.getDate());
-    }else{
-        var dd = today.getDate();
-    }
-    if(today.getMonth() < 10){
-        var mm = ('0'+(today.getMonth()+1)); //January is 0!
-    }else{
-         var mm = today.getMonth()+1; //January is 0!
-    }
-    
-  
+    var dd = ('0'+today.getDate()).substring(-2);
+    var mm = today.getMonth()+1; //January is 0!
     var yyyy = today.getFullYear();
     $('#visit_date').focus();
     today = dd+'-'+mm+'-'+yyyy;
@@ -359,7 +344,6 @@ $(document).ready(function() {
         var visit_date = $('#visit_date').val();
         var total_row = new Array();
         // $(".content2").html("หน้าที่ 1 / "+(total_row / row_per_page);
-        
         $("#curpage").val(1);
         $.getJSON('pt_visit_data.php',{visit_date:visit_date,visit_type:visit_type,limit:0}, function(data) {
             //  loop push array creat  numrows  to  page nummber//////////
@@ -430,42 +414,33 @@ $(document).ready(function() {
                     var pdx = this.innerText;
                     var this_td = this;
                     var this_tr = this_td.parentNode.rowIndex;
-                    
                     if(class_dx=='dx'){
                         var link_page = 'pt_edit_dx_form.php?id_dx='+id_dx+'&&pdx='+pdx+'&&visit_type='+visit_type;
-                        var modal = false;
                     }else if(class_dx=='dx_new'){
                         var link_page = 'pt_add_dx_form.php?id_dx='+id_dx;
-                        var modal = false;
                     }else if(class_dx=='history'){                           
                         var link_page = 'pt_history_form.php?hn='+id_dx;
-                        var modal = true;
                     }else{
                         var link_page = 'pt_edit_dx_all_form.php?id_dx='+id_dx;
-                        var modal = false;
                     }
                     $.fancybox({'href'	: link_page,//link_page+id_dx+'&&pdx='+pdx+'',
                         'width' : 1000,
                         'height' : 1000,
-                        'modal' : modal,
-                        //'showCloseButton' : true,
                         'autoSize' : false,
                         'transitionIn'  :   'elastic',
                         'transitionOut' :   'elastic',
                         'speedIn'    :  600,
                         'speedOut'   :  100,
                         'overlayShow'   :   false,
-                        'closeBtn': false,
+                        'closeBtn': true,
                         'hideOnOverlayClick' : false, // prevents closing clicking OUTSIE fancybox
                         'hideOnContentClick' : false, // prevents closing clicking INSIDE fancybox
-                        'enableEscapeButton' : true,  // prevents closing pressing ESCAPE key
+                        'enableEscapeButton' : false,  // prevents closing pressing ESCAPE key
                         'autoCenter': true, // and not 'true'
                         beforeShow: function () {     
                             /* this.width = $(this.element).data("width") ? $(this.element).data("width") : null;
                              this.height = $(this.element).data("height") ? $(this.element).data("height") : null;*/                            
                         },
-                        afterShow : function() {
-                            $('.fancybox-skin').append('<a title="Close" class="fancybox-item fancybox-close" href="javascript:jQuery.fancybox.close();"></a>');},
                         onComplete : function() {    
                             if(class_dx!='history'){
                                 var old_dx = this_td.innerText;
@@ -551,7 +526,6 @@ $(document).ready(function() {
 
 });
 $('.dem2').on('page', function(event, num){
-
     var hn = $('#hn').val();
     if(hn == ''){    
         var radios_visit_type = document.getElementsByName("visit_type");
@@ -562,38 +536,25 @@ $('.dem2').on('page', function(event, num){
                         break;
                     }
                 }                    
-       var row_per_page = 10;
+        var row_per_page = 10;
         var visit_date = $('#visit_date').val();
         var total_row = new Array();
         $("#curpage").val(num);
-        var limit = (num-1) * row_per_page;  
-        
+        var limit = (num-1) * row_per_page;        
         $.getJSON('pt_visit_data.php',{visit_date:visit_date,visit_type:visit_type,limit:limit}, function(data) {
             //  loop push array creat  numrows  to  page nummber//////////
             //alert(num);
             $.each(data, function(key,value) {
                 total_row.push(value.total_rows);
             });
-            var numrow = (total_row[1]); 
-            var all_page = Math.ceil(numrow/row_per_page);
-            var maxVisible= (all_page - row_per_page);
-            //alert(all_page);
-            //alert(maxVisible);
-            //alert(num);
-            if(maxVisible > row_per_page){
-                maxVisible = row_per_page;
-            }else{
-                maxVisible = all_page ;
-            } 
-            //var row_per_page = 10;
-            $(".content2").html("หน้าที่ "+ num +"  / "+Math.ceil((numrow/row_per_page)));
-                $(".total").html("จำนวนผู้รับบริการในช่วงเวลาที่เลือก  "+numrow+"   ราย");
-                $('.dem2').bootpag({
-                    total: Math.ceil(numrow/row_per_page),
-                    page: num,
-                    maxVisible:maxVisible//Math.ceil(numrow/row_per_page)
-                    
-                })
+            var numrow = (total_row[1]);            
+            $(".content2").html("หน้าที่ 1 / "+Math.ceil((numrow/row_per_page)));
+            $(".total").html("จำนวนผู้รับบริการในช่วงเวลาที่เลือก  "+numrow+"   ราย");
+            $('.dem2').bootpag({
+                total: Math.ceil(numrow/row_per_page),
+                page: 1,
+                maxVisible:10//Math.ceil(numrow/row_per_page)
+            })
             //  end create  page number///////////
             $('tbody#my_news tr').remove();
             var i = 1;
@@ -652,39 +613,31 @@ $('.dem2').on('page', function(event, num){
                     var this_tr = this_td.parentNode.rowIndex;
                     if(class_dx=='dx'){
                         var link_page = 'pt_edit_dx_form.php?id_dx='+id_dx+'&&pdx='+pdx+'&&visit_type='+visit_type;
-                        var modal = false;
                     }else if(class_dx=='dx_new'){
                         var link_page = 'pt_add_dx_form.php?id_dx='+id_dx;
-                        var modal = false;
                     }else if(class_dx=='history'){                           
                         var link_page = 'pt_history_form.php?hn='+id_dx;
-                        var modal = true;
                     }else{
                         var link_page = 'pt_edit_dx_all_form.php?id_dx='+id_dx;
-                        var modal = false;
                     }
                     $.fancybox({'href'	: link_page,//link_page+id_dx+'&&pdx='+pdx+'',
                         'width' : 1000,
                         'height' : 1000,
-                        'modal' :  modal,
-                        //'showCloseButton' : true,
                         'autoSize' : false,
                         'transitionIn'  :   'elastic',
                         'transitionOut' :   'elastic',
                         'speedIn'    :  600,
                         'speedOut'   :  100,
                         'overlayShow'   :   false,
-                        'closeBtn': false,
+                        'closeBtn': true,
                         'hideOnOverlayClick' : false, // prevents closing clicking OUTSIE fancybox
                         'hideOnContentClick' : false, // prevents closing clicking INSIDE fancybox
-                        'enableEscapeButton' : true,  // prevents closing pressing ESCAPE key
+                        'enableEscapeButton' : false,  // prevents closing pressing ESCAPE key
                         'autoCenter': true, // and not 'true'
                         beforeShow: function () {     
                             /* this.width = $(this.element).data("width") ? $(this.element).data("width") : null;
                              this.height = $(this.element).data("height") ? $(this.element).data("height") : null;*/                            
                         },
-                        afterShow : function() {
-                            $('.fancybox-skin').append('<a title="Close" class="fancybox-item fancybox-close" href="javascript:jQuery.fancybox.close();"></a>');},
                         onComplete : function() {    
                             if(class_dx!='history'){
                                 var old_dx = this_td.innerText;
@@ -792,14 +745,16 @@ function search_by_hn(){
         //var  row_per_page = 5;
         //var total_row = new Array();
         $.getJSON('pt_visit_data_hn.php',{hn:hn,visit_date:visit_date,visit_type:visit_type,limit:0}, function(data) {
+            /* $.each(data, function(key,value) {
+             total_row.push(value.total_rows);
+             });
+             var numrow = (total_row[1]);*/
 
             $('.dem2').bootpag({
                 total: 1,
                 page: 1,
                 maxVisible: 1
-            });
-            $(".content2").html("");
-            $(".total").html("");
+            })
             $('tbody#my_news tr').remove();
             $.each(data, function(key,value) {
                 $("tbody#my_news").append("<tr><td style='text-align: center'>"+value.numrecord+"</td>" +
@@ -855,39 +810,31 @@ function search_by_hn(){
                     var this_tr = this_td.parentNode.rowIndex;
                     if(class_dx=='dx'){
                         var link_page = 'pt_edit_dx_form.php?id_dx='+id_dx+'&&pdx='+pdx+'&&visit_type='+visit_type;
-                        var modal = false;
                     }else if(class_dx=='dx_new'){
                         var link_page = 'pt_add_dx_form.php?id_dx='+id_dx;
-                        var modal = false;
                     }else if(class_dx=='history'){                           
                         var link_page = 'pt_history_form.php?hn='+id_dx;
-                        var modal = true;
                     } else{
                         var link_page = 'pt_edit_dx_all_form.php?id_dx='+id_dx;
-                        var modal = false;
                     }
-                    $.fancybox({'href'	: link_page,//link_page+id_dx+'&&pdx='+pdx+'',
-                        'width' : 1000,
-                        'height' : 1000,
-                       'modal' :  modal,
-                        //'showCloseButton' : true,
-                        'autoSize' : false,
-                        'transitionIn'  :   'elastic',
-                        'transitionOut' :   'elastic',
-                        'speedIn'    :  600,
-                        'speedOut'   :  100,
-                        'overlayShow'   :   false,
-                        'closeBtn': false,
-                        'hideOnOverlayClick' : false, // prevents closing clicking OUTSIE fancybox
-                        'hideOnContentClick' : false, // prevents closing clicking INSIDE fancybox
-                        'enableEscapeButton' : true,  // prevents closing pressing ESCAPE key
-                        'autoCenter': true, // and not 'true'
+                    $.fancybox({href	: link_page,//link_page+id_dx+'&&pdx='+pdx+'',
+                        //'width' : '70%',
+                        //'height' : '50%',
+                        autoSize : true,
+                        transitionIn  :   'elastic',
+                        transitionOut :   'elastic',
+                        speedIn    :  600,
+                        speedOut   :  200,
+                        overlayShow   :   false,
+                        closeBtn: true,
+                        hideOnOverlayClick : false, // prevents closing clicking OUTSIE fancybox
+                        hideOnContentClick : false, // prevents closing clicking INSIDE fancybox
+                        enableEscapeButton : false,  // prevents closing pressing ESCAPE key   
+                        autoCenter: true, // and not 'true'
                         beforeShow: function () {     
                             /* this.width = $(this.element).data("width") ? $(this.element).data("width") : null;
                              this.height = $(this.element).data("height") ? $(this.element).data("height") : null;*/                            
                         },
-                        afterShow : function() {
-                            $('.fancybox-skin').append('<a title="Close" class="fancybox-item fancybox-close" href="javascript:jQuery.fancybox.close();"></a>');},
                         onComplete : function() {    
                             if(class_dx!='history'){
                                 var old_dx = this_td.innerText;
@@ -937,19 +884,10 @@ function search_by_hn(){
                         }
                     });
                     ////  use ajax to sent  $_get  to  other page///////////////
-                    if(class_dx=='dx'){
-                        url: 'pt_edit_dx_form.php'
-                    }else if(class_dx=='dx_new'){
-                        url: 'pt_add_dx_form.php'
-                    }else if(class_dx=='history'){                           
-                        url: 'pt_history_form.php'
-                    }else{
-                        url: 'pt_edit_dx_all_form.php'
-                    }
                     $.ajax({
                         type: "POST",
                         dataType: "html",
-                        url: url
+                        url: "pt_edit_dx_form.php"
                         //data: id
 
                     });

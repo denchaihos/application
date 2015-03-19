@@ -44,11 +44,10 @@
 </style>
 
 <body>
-<div class="navbar navbar-inverse" style="padding-top: 5px;border-radius: 0px">
+<div class="navbar navbar-inverse" style="padding-top: 5px;border-radius: 0px;margin-bottom: 0px">
 
         <div class="col-lg-6">
             <span class="label" style="font-size: 20px">ปรับปรุงรหัสวินิจฉัย</span>
-
         </div>
         <div class="col-lg-6 " style="text-align: right">
             <form class="form-inline" role="form">

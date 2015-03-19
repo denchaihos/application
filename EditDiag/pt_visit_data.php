@@ -11,7 +11,7 @@ $limit = $_GET['limit'];
 if($visit_type =='O'){
 
     $sql_numrow = "SELECT count(vn) as totalrow  FROM  ovst where date(vstdttm)='$visit_date' ";
-    $sql ='select od.id as id_dx,concat(p.fname," ",p.lname) as ptname,o.hn,time(o.vstdttm) as vstdttm,od.icd10,od.cnt,o.vn from ovst o left outer join ovstdx od on od.vn=o.vn left outer join pt p on p.hn=o.hn   where date(o.vstdttm) = "'.$visit_date.'" and od.cnt="1" order by o.vstdttm limit '.$limit.', 10 ';
+    $sql ='select od.id as id_dx,concat(p.fname," ",p.lname) as ptname,o.hn,time(o.vstdttm) as vstdttm,od.icd10,od.cnt,o.vn from ovst o left outer join ovstdx od on od.vn=o.vn left outer join pt p on p.hn=o.hn   where date(o.vstdttm) = "'.$visit_date.'" group by o.vn order by o.vstdttm limit '.$limit.', 10 ';
 
 }else{
 

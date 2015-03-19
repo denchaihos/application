@@ -7,6 +7,10 @@ $visit_date = substr($_GET['visit_date'],-4)."-".substr($_GET['visit_date'],3,2)
 $limit = $_GET['limit'];
 $hn = $_GET['hn'];
 $visit_type = $_GET['visit_type'];
+/*$visit_date = '2015-01-07';
+        $limit = 1;
+        $hn =7372;
+        $visit_type ='O';*/
 //$sql_numrow = "SELECT count(vn) as totalrow  FROM  ovst where hn= '$search' ";
 
 //$result_numrow = mysql_query($sql_numrow);
@@ -79,7 +83,7 @@ while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
             $row_array['dx'.$k] = '';
         }
     }
-    $row_array['total_rows'] = $numrow['totalrow'];
+    //$row_array['total_rows'] = $numrow['totalrow'];
     array_push($data,$row_array);
     $i++;
 }

@@ -33,6 +33,7 @@
     <script type="text/javascript">
 
         function save_dx(){
+            add_element();
             var dx_array = [];
             var obj = $('li input');
             var len_icd =  (obj.length)/2;
@@ -146,10 +147,22 @@
 
 
         });
+        function fancyboxClose(){
+	$.fancybox.close(); 
+}
     </script>
 </head>
 <body>
-เพิ่มรหัสวินิจฉัย
+    <div class="container baackgroud_me">
+        <div  class="col-lg-12 label label-default">
+            <div class="col-lg-11" style="font-size:18px;text-align: left">
+               เพิ่มรหัสวินิจฉัย        
+            </div>
+            <div class="col-lg-1 fancybox-skin" style="text-align:right;">  
+                <!--<img src="css/fancybox/fancy_close.png" alt="" onclick="fancyboxClose();" style="cursor:pointer"/>-->
+            </div>
+        </div>
+
 <?php
 $id_dx = $_GET['id_dx'];
 //$dx = $_GET['pdx'];
@@ -206,5 +219,6 @@ $result = mysql_query($sql,$con);
 
     </form>
 </div>
+    </div>
 </body>
 </html>

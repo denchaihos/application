@@ -31,22 +31,47 @@
         }
     </style>
     <script type="text/javascript">
+        function resizeFancyBox()
+{
+ var newheight = $(window).height() - 30;
+ var newHeightStr = newheight + 'px';
+ $("#fancybox-content").css({ 'height': newHeightStr });
+}
+
+function closeCallback() {
+ $(window).unbind('resize', resizeFancyBox);
+}
+
+function startCallback(){
+ $(window).bind('resize', resizeFancyBox);
+}
+
+function showEformFancyBox() {
+ $('#hdnFancyBoxLink').fancybox({
+  width: 800,
+  height: $(window).height() - 20,
+  onStarted : startCallback,
+  onClosed : closeCallback,
+  showCloseButton: true
+ });
+ $('#hdnFancyBoxLink').click();
+}
         function edit_dx(){
-            $.fancybox({'href'	: 'pt_edit_dx_form.php',
-                'transitionIn'  :   'elastic',
-                'transitionOut' :   'elastic',
-                'speedIn'    :  600,
-                'speedOut'   :  200,
-                'overlayShow'   :   true,
-               'enableEscapeButton': false,
+            $.fancybox({'href'	: 'testfancy2.php',
+                  width: 800,
+                  height: $(window).height() - 20,
+                  showCloseButton: true,                
+                speedIn    :  600,
+                speedOut   :  200,
+                overlayShow   :   true,
+               enableEscapeButton: false,
+                onStarted : startCallback,
+                
 
                 onComplete : function() {
                     $('#txtwasadu_name').focus();
                 },
-                onClosed : function(){
-                   // $('#flex1').focus();
-                  //  $("#flex1").flexReload();
-                }
+                onClosed : closeCallback,
             });
             $.ajax({
                 type: "POST",
@@ -94,7 +119,7 @@
     </script>
 </head>
 <body>
-<input type="button" value="testfancy" onclick="edit_dx()"/>
+    <input type="button" value="testfancy" id="hdnFancyBoxLink" onclick="edit_dx()"/>
 
 
 

@@ -1,6 +1,4 @@
-<?php
-session_start();
-ob_start();
+<?php session_start(); ob_start();
 if($_SESSION['name']==''){    
      header( "location: login.php" );
  exit(0);
@@ -105,8 +103,7 @@ and open the template in the editor.
               
               
            }
-           #panel
-            {
+           #panel {
                 padding:5px;
                 text-align:center;
                 background-color:#e5eecc;
